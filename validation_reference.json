@@ -1,0 +1,182 @@
+{
+  "2": {
+    "formula": "TiCl4",
+    "has_hypothesis": true,
+    "role_label": "acidic_modifier",
+    "mechanism_description": "TiCl₄ rapidly hydrolyzes in aqueous media, releasing HCl which lowers the pH and slows Ti‑oxo polymerization, thereby controlling nucleation/growth and influencing morphology of TiO₂ or related phases.",
+    "historical_pass": true,
+    "confidence": "medium",
+    "reasoning": "The evidence reports that TiCl₄ hydrolyzes to give an acidic sol (pH 3.3) and that the free acid concentration critically controls nanocrystal size and powder morphology, which aligns with the claim that HCl‑generated low pH modulates nucleation/growth; however, it does not explicitly describe the slowing of Ti‑oxo polymerization."
+  },
+  "5": {
+    "formula": "FeCl3",
+    "has_hypothesis": true,
+    "role_label": "pH_modifier",
+    "mechanism_description": "In aqueous solution FeCl₃ hydrolyzes to generate Fe³⁺ and H⁺, lowering the pH and thereby controlling the precipitation of iron hydroxide/oxide phases; the Cl⁻ also acts as a weak complexing/anionic species that can influence nucleation and morphology.",
+    "historical_pass": false,
+    "confidence": "medium",
+    "reasoning": "The evidence shows that FeCl₃ concentration and pH affect iron oxide precipitation and particle morphology, but it does not explicitly demonstrate hydrolysis to H⁺ lowering pH or a specific complexing role of Cl⁻ as claimed."
+  },
+  "11": {
+    "formula": "CH4N2S",
+    "has_hypothesis": true,
+    "role_label": "S-donor",
+    "mechanism_description": "Under hydrothermal or precipitation conditions thiourea thermally decomposes to release H2S/S²⁻, supplying sulfide for metal‑sulfide formation while also reducing higher oxidation‑state metals and acting as a complexing/structure‑directing agent.",
+    "historical_pass": false,
+    "confidence": "medium",
+    "reasoning": "The evidence confirms thiourea releases H2S/S²⁻ and acts as a complexing/structure‑directing agent in hydrothermal synthesis of metal sulfides, but it does not provide confirmation that thiourea reduces higher oxidation‑state metals."
+  },
+  "13": {
+    "formula": "AgNO3",
+    "has_hypothesis": false,
+    "role_label": null,
+    "mechanism_description": null,
+    "historical_pass": null,
+    "confidence": null,
+    "reasoning": null
+  },
+  "18": {
+    "formula": "NH4VO3",
+    "has_hypothesis": true,
+    "role_label": "templating_agent",
+    "mechanism_description": "NH4+ from NH4VO3 intercalates between forming V‑oxide layers, acting as a charge‑balancing template that directs the assembly of layered or tunnel polyvanadate structures and also buffers the solution pH during hydrothermal synthesis.",
+    "historical_pass": false,
+    "confidence": "high",
+    "reasoning": "The evidence notes that NH4VO3 is a common precursor and that cations can insert between vanadate layers, but it does not specifically demonstrate NH4+ intercalation or pH‑buffering as the templating mechanism claimed."
+  },
+  "25": {
+    "formula": "FeCl3·6H2O",
+    "has_hypothesis": true,
+    "role_label": "pH_modifier",
+    "mechanism_description": "Upon dissolution, FeCl₃·6H₂O hydrolyzes to produce Fe³⁺ and Cl⁻; the strong Lewis acidity of Fe³⁺ releases protons, lowering the solution pH and thus controlling precipitation kinetics and phase selection (and chloride can transiently complex Fe³⁺).",
+    "historical_pass": false,
+    "confidence": "low",
+    "reasoning": "The evidence only confirms that FeCl3·6H2O dissolves to give Fe³⁺ and Cl⁻, matching anhydrous FeCl₃ chemistry; it does not demonstrate the Lewis acidity‑driven proton release, pH lowering, kinetic control, or transient chloride complexation claimed."
+  },
+  "26": {
+    "formula": "FeSO4·7H2O",
+    "has_hypothesis": true,
+    "role_label": "reducing_agent",
+    "mechanism_description": "Fe²⁺ from FeSO₄·7H₂O can act as a mild reductant, converting Fe³⁺ or other oxidizing species and facilitating the formation of mixed‑valence iron oxides (e.g., magnetite) during hydrothermal or precipitation reactions.",
+    "historical_pass": false,
+    "confidence": "medium",
+    "reasoning": "The sources describe FeSO₄·7H₂O merely as an iron source in magnetite syntheses and note a separate reductant (e.g., plant extract); they do not provide direct evidence that Fe²⁺ from FeSO₄·7H₂O functions as the mild reductant converting Fe³⁺."
+  },
+  "35": {
+    "formula": "ZnCl2",
+    "has_hypothesis": true,
+    "role_label": "mineralizer_complexing_agent",
+    "mechanism_description": "In aqueous media ZnCl₂ forms chloro‑zinc complexes (e.g., [ZnCl₄]²⁻) that slow the release of free Zn²⁺ and provide Cl⁻ as a mineraliser, thereby influencing nucleation rates, crystal growth and morphology beyond merely supplying zinc.",
+    "historical_pass": false,
+    "confidence": "high",
+    "reasoning": "The evidence shows ZnCl₂ is used merely as a zinc source and that morphology control stems from surfactants or temperature; it lacks direct confirmation that chloro‑zinc complexes modulate free Zn²⁺ release or that Cl⁻ acts as a mineraliser influencing nucleation beyond supplying zinc."
+  },
+  "37": {
+    "formula": "KMnO4",
+    "has_hypothesis": true,
+    "role_label": "oxidant",
+    "mechanism_description": "In hydrothermal or precipitation syntheses KMnO₄ acts as a strong oxidizing agent, generating MnO₂ (or higher‑valent Mn species) by reduction of permanganate while simultaneously providing K⁺; the gradual release of Mn from KMnO₄ can influence nucleation and morphology beyond merely supplying Mn.",
+    "historical_pass": true,
+    "confidence": "high",
+    "reasoning": "The evidence explicitly states that KMnO₄ is used as an oxidizing agent to convert MnSO₄ into MnO₂ and in birnessite synthesis, confirming both its role as a Mn source/oxidant and the influence of reaction time/temperature on product morphology."
+  },
+  "57": {
+    "formula": "CoCl2·6H2O",
+    "has_hypothesis": true,
+    "role_label": "mineralizer",
+    "mechanism_description": "In hydrothermal or precipitation syntheses the Cl⁻ from CoCl₂·6H₂O can complex with Co²⁺, lowering supersaturation and acting as a mineralizing/structure‑directing anion that influences crystal nucleation and morphology of cobalt oxides/hydroxides.",
+    "historical_pass": false,
+    "confidence": "medium",
+    "reasoning": "The studies show that chloride as a counter‑ion influences cobalt oxide/hydroxide morphology, confirming a mineralizing/structure‑directing effect, but they do not demonstrate the specific mechanism of Cl⁻ complexing Co²⁺ to lower supersaturation."
+  },
+  "76": {
+    "formula": "H3PO4",
+    "has_hypothesis": true,
+    "role_label": "pH_modulator",
+    "mechanism_description": "In hydrothermal or precipitation syntheses, H₃PO₄ supplies protons that lower the solution pH, controlling metal‑phosphate solubility and nucleation; its phosphate species also complex metal ions, acting as a mineralizer/structure‑directing agent for crystalline phosphates.",
+    "historical_pass": false,
+    "confidence": "medium",
+    "reasoning": "The evidence confirms H₃PO₄ lowers solution pH and supplies phosphate anions (pH‑modulating role), but it does not provide proof that its phosphate species complex metal ions or function as a mineralizer/structure‑directing agent."
+  },
+  "79": {
+    "formula": "SnCl4·5H2O",
+    "has_hypothesis": true,
+    "role_label": "acidic_pH_modulator",
+    "mechanism_description": "In aqueous media SnCl4·5H2O rapidly hydrolyzes, releasing HCl and creating a strongly acidic environment that controls the pH‑dependent precipitation of tin oxides; the liberated Cl⁻ also forms soluble [SnCl₆]²⁻ complexes which modulate Sn speciation and influence nucleation and particle morphology.",
+    "historical_pass": false,
+    "confidence": "high",
+    "reasoning": "The evidence confirms that pH influences particle properties, but shows chloride complexes are only transient intermediates and not the speciation-modulating agents claimed; it does not demonstrate formation of [SnCl6]²⁻ or its role in nucleation/morphology."
+  },
+  "85": {
+    "formula": "NiSO4·6H2O",
+    "has_hypothesis": true,
+    "role_label": "structure_director",
+    "mechanism_description": "In nickel hydroxide or layered double hydroxide syntheses, the sulfate anion can be retained as an interlayer species, influencing layer spacing, morphology and crystallinity rather than acting solely as a Ni source.",
+    "historical_pass": false,
+    "confidence": "medium",
+    "reasoning": "The evidence confirms that sulfate can be retained as an interlayer anion influencing LDH properties, but it does not specifically demonstrate NiSO4·6H2O acting as the deliberate sulfate source rather than just a nickel source."
+  },
+  "94": {
+    "formula": "Si(OC2H5)4",
+    "has_hypothesis": true,
+    "role_label": "slow_hydrolysis_precursor",
+    "mechanism_description": "TEOS undergoes controlled hydrolysis to Si(OH)4, releasing ethanol and gradually supplying silicate species; this slow release modulates pH and nucleation/growth rates in hydrothermal or precipitation syntheses.",
+    "historical_pass": true,
+    "confidence": "high",
+    "reasoning": "The evidence describes stepwise TEOS hydrolysis releasing silanol groups and continuous nucleation that directly affects particle size, confirming that the slow release of silicate species governs nucleation/growth rates as claimed."
+  },
+  "99": {
+    "formula": "MnSO4·H2O",
+    "has_hypothesis": false,
+    "role_label": null,
+    "mechanism_description": null,
+    "historical_pass": null,
+    "confidence": null,
+    "reasoning": null
+  },
+  "121": {
+    "formula": "Zn(CH3COO)2",
+    "has_hypothesis": true,
+    "role_label": "buffer",
+    "mechanism_description": "The acetate anion from Zn(CH3COO)2 buffers the reaction medium around pH ≈ 4.7 and transiently complexes Zn²⁺, slowing its hydrolysis and thereby influencing nucleation and crystal growth.",
+    "historical_pass": false,
+    "confidence": "high",
+    "reasoning": "The retrieved evidence notes zinc acetate as a precursor but attributes morphology control to solvent system and added base pH rather than acetate’s buffering at ~pH 4.7 or its transient Zn²⁺ complexation, so the specific mechanistic claim is not confirmed."
+  },
+  "148": {
+    "formula": "Na2WO4·2H2O",
+    "has_hypothesis": true,
+    "role_label": "pH_modifier",
+    "mechanism_description": "In aqueous solution Na2WO4·2H2O dissociates to WO4²⁻, which hydrolyzes to give basic tungstate species that raise the pH and buffer the medium, influencing precipitation and crystal growth of many metal oxides.",
+    "historical_pass": false,
+    "confidence": "high",
+    "reasoning": "The retrieved procedures show that pH is controlled by adding HCl rather than by Na2WO4·2H2O acting as a buffer; there is no evidence confirming the tungstate’s basic species raise or buffer the pH to influence crystal growth."
+  },
+  "158": {
+    "formula": "(NH4)2HPO4",
+    "has_hypothesis": true,
+    "role_label": "buffer",
+    "mechanism_description": "In aqueous solution (NH4)2HPO4 dissociates to NH4+ and HPO4²‑, providing a weakly acidic/alkaline buffer that moderates pH; under hydrothermal conditions NH4+ can release NH3, slowly raising the pH and influencing nucleation/growth of phosphate phases.",
+    "historical_pass": false,
+    "confidence": "high",
+    "reasoning": "The evidence only notes (NH4)2HPO4 as a phosphorus source with pH set by added ammonium hydroxide, and mentions extra NH4+ can affect crystallization, but it does not demonstrate that the salt itself buffers the solution or releases NH3 to modulate pH as claimed."
+  },
+  "164": {
+    "formula": "Na2S",
+    "has_hypothesis": true,
+    "role_label": "pH_modifier",
+    "mechanism_description": "In water Na2S hydrolyzes to HS⁻ and OH⁻, raising the solution pH; this basic environment can control metal‑hydroxo precipitation pathways and influence phase selection in hydrothermal or co‑precipitation syntheses.",
+    "historical_pass": false,
+    "confidence": "medium",
+    "reasoning": "The evidence confirms that Na2S hydrolyzes to produce OH⁻ and raises solution pH, but it does not demonstrate that this alkaline environment specifically controls metal‑hydroxo precipitation pathways or influences phase selection in hydrothermal/co‑precipitation syntheses."
+  },
+  "197": {
+    "formula": "FeCl2·4H2O",
+    "has_hypothesis": false,
+    "role_label": null,
+    "mechanism_description": null,
+    "historical_pass": null,
+    "confidence": null,
+    "reasoning": null
+  }
+}

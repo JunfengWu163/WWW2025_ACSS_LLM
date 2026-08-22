@@ -1,0 +1,6 @@
+{
+  "has_hypothesis": true,
+  "role_label": "oxidizing agent / self-templating structure director",
+  "mechanism_description": "KMnO4 is a strong oxidizer that is reduced (Mn7+ to Mn4+/3+/2+) during synthesis, driving redox reactions with reducing agents or organics (e.g., forming MnO2 nanostructures) and often acting as both the manganese source and the in-situ oxidant that shapes crystal morphology via redox-controlled nucleation.",
+  "search_query": "KMnO4 as oxidizing agent hydrothermal synthesis MnO2 nanostructure mechanism"
+}

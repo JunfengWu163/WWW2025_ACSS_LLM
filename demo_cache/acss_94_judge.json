@@ -1,0 +1,5 @@
+{
+  "supported": true,
+  "confidence": "medium",
+  "reasoning": "The evidence directly confirms TEOS stepwise hydrolysis to silanols followed by condensation into a siloxane network, and that reaction conditions involving TEOS govern nucleation and particle size, supporting the controlled sol-gel precursor/kinetics role. However, it does not specifically confirm structure-directing behavior, coating formation, or porosity/morphology control beyond particle size."
+}

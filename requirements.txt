@@ -1,0 +1,9 @@
+anthropic
+openai
+python-dotenv
+jsonschema
+networkx
+matplotlib
+ipywidgets
+jupyterlab
+ipykernel

@@ -1,0 +1,6 @@
+{
+  "has_hypothesis": true,
+  "role_label": "hydrolysis-driven pH modifier / anion structure-directing agent",
+  "mechanism_description": "Fe3+ undergoes strong hydrolysis in water, releasing H+ and progressively lowering solution pH, which controls nucleation/growth kinetics of iron oxide/oxyhydroxide phases; the accompanying Cl- ions can also be incorporated into or adsorb on developing structures (e.g., akaganeite tunnels, anisotropic hematite/goethite growth), acting as a mineralizer or morphology-directing anion.",
+  "search_query": "FeCl3 hydrolysis pH control morphology iron oxide hematite akaganeite chloride structure-directing"
+}

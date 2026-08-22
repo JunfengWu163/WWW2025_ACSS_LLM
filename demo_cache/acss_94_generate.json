@@ -1,0 +1,6 @@
+{
+  "has_hypothesis": true,
+  "role_label": "slow-release hydrolysis agent / structure-directing sol-gel precursor",
+  "mechanism_description": "TEOS acts as a molecular silica precursor that undergoes controlled hydrolysis and condensation (via acid- or base-catalyzed sol-gel reactions) to slowly release silicate species, enabling gradual, homogeneous silica network formation or coating rather than instantaneous ionic dissolution; its ethoxy groups also modulate reaction kinetics, particle size, and porosity/morphology of the resulting silica or silicate materials.",
+  "search_query": "TEOS tetraethyl orthosilicate hydrolysis condensation sol-gel mechanism silica particle formation"
+}

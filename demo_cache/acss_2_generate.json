@@ -1,0 +1,6 @@
+{
+  "has_hypothesis": true,
+  "role_label": "in-situ hydrolysis/acid-generating agent",
+  "mechanism_description": "TiCl4 undergoes rapid, highly exothermic hydrolysis in water, releasing HCl and lowering the solution pH in situ, which controls the nucleation/growth kinetics and phase (anatase vs rutile) of the resulting TiO2 and can act as a peptizing agent for colloidal sol formation.",
+  "search_query": "TiCl4 hydrolysis HCl release pH control TiO2 anatase rutile phase sol-gel"
+}

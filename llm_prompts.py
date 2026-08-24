@@ -1,16 +1,20 @@
 """
 LLM Prompts for Two-Round Chemical Synthesis Protocol Parsing
 =============================================================
-Converts a structured synthesis record (from the solution-based inorganic
-materials dataset) into a two-level hierarchical DAG:
+Converts a chemical synthesis protocol into a two-level hierarchical DAG:
 
   Round 1 → Task DAG        (human-readable + machine-targeted nodes, material-flow edges)
   Round 2 → Atomic-op DAG   (XDL-style atomic actions, equipment labels, per task node)
 
-NOTE on input: The dataset paragraph_string fields are copyright-truncated.
-Prompts therefore operate on the structured fields (operations, precursors,
-solvents, quantities, type) rather than raw prose. This is intentional and
-actually more reliable for downstream scheduling.
+Two Round 1 input paths:
+  build_round1_prompt_from_text() -- parses raw protocol PROSE directly; the
+      LLM identifies operations, materials, quantities, and conditions itself
+      from free text. This is what the demo notebook uses.
+  build_round1_prompt()           -- parses a pre-extracted structured record
+      (operations/precursors/solvents/quantities/type) from the solution-based
+      inorganic materials dataset. Kept for that dataset, whose paragraph_string
+      field is copyright-truncated (~50 chars + "<...>" + ~50 chars) and so
+      isn't usable for text parsing.
 
 Model recommendation : claude-sonnet-4-5 or better
 Temperature          : 0.1  (deterministic structured output)
@@ -144,6 +148,137 @@ markdown fences:
   ]
 }}
 """
+
+
+ROUND1_SYSTEM_TEXT = """\
+You are an expert in automated chemical synthesis and robotic lab scheduling.
+Your task is to read a chemical synthesis protocol written as free-text prose
+(an experimental section / lab procedure) and produce a Task DAG (Directed
+Acyclic Graph).
+
+## Step 1 — read the protocol, don't wait for pre-extracted fields
+Nothing has been extracted for you: no operation list, no conditions table.
+Identify every discrete action described in the prose (mix, dissolve, heat,
+cool, filter, wash, dry, etc.), along with the materials, quantities, and
+conditions (temperature, time, atmosphere) attached to each action, directly
+from the text.
+
+## Step 2 — edges encode MATERIAL FLOW, not textual order
+Add a directed edge from task A to task B ONLY when B physically requires the
+output material of A as one of its inputs. Two tasks that each prepare a
+separate solution independently — even if described sequentially in the
+prose — are PARALLEL nodes with NO edge between them. They only converge at
+the task that combines both.
+
+## Node design (hybrid human + machine)
+Each node carries two representations simultaneously:
+  - label          : Short, human-readable phrase (≤10 words), e.g.
+                     "Dissolve CoCl₂ in ethylene glycol"
+  - description    : One sentence, imperative, machine-targeted, precise:
+                     action + materials + key conditions, e.g.
+                     "Dissolve 1.2 g CoCl₂ in 40 mL ethylene glycol with
+                      magnetic stirring at room temperature."
+  - action_verb    : Single lowercase verb, e.g. "dissolve", "heat", "filter"
+  - inputs         : List of material objects consumed by this task
+  - output         : Single intermediate or final material produced
+  - operation_types: One or more of: MixingOperation, HeatingOperation,
+                     CoolingOperation, PurificationOperation, DryingOperation,
+                     ShapingOperation, CharacterizationOperation — chosen by
+                     you, from what the prose describes, not given to you.
+  - equipment_hints: 1–3 equipment IDs from the controlled vocabulary
+
+## Output nodes are the DAG's "variable names"
+Name intermediate outputs clearly and consistently, e.g. "amine_HCl_salt",
+"free_base_in_pentane", "lidocaine_bisulfate". Edge material fields must
+reference these exact names.
+
+## Parallelism detection checklist
+Before writing edges, ask for each pair of nodes:
+  1. Does node B's inputs list include node A's output? → YES = add edge
+  2. Are they preparing different starting materials from reagents? → NO edge
+  3. Does B operate on a product that only exists after A completes? → YES = edge
+  4. Could a robot start B before A is finished without affecting the result? → NO edge
+
+## Reasoning field
+Always include a "reasoning" field BEFORE the nodes and edges. Use it for
+two things: (1) which operations you identified in the prose and how you
+segmented them into tasks, and (2) which tasks you identified as parallel
+vs. sequential and why.
+"""
+
+ROUND1_USER_TEMPLATE_TEXT = """\
+Parse the following chemical synthesis protocol into a Task DAG.
+
+### Protocol metadata
+- Source          : {source}
+- Target material : {target}
+- Synthesis type  : {synthesis_type}
+
+### Protocol text
+```
+{protocol_text}
+```
+
+### Controlled equipment vocabulary (use these IDs only)
+{equipment_ids}
+
+### Output JSON schema
+Return ONLY a valid JSON object matching this exact schema — no prose, no
+markdown fences:
+
+{{
+  "protocol_id":     "<source id>",
+  "target_material": "<target material>",
+  "synthesis_type":  "<synthesis type>",
+  "reasoning": "<what operations you found in the prose, and explain parallel vs sequential decisions before listing nodes>",
+  "nodes": [
+    {{
+      "id":              "T1",
+      "label":           "<short human-readable title>",
+      "description":     "<one precise imperative sentence>",
+      "action_verb":     "<single lowercase verb>",
+      "inputs":  [ {{"material": "<name>", "amount": "<amount or null>"}} ],
+      "output":  {{"material": "<intermediate_name>", "state": "<solid|liquid|slurry|gas>"}},
+      "operation_types": ["<MixingOperation|HeatingOperation|...>"],
+      "equipment_hints": ["<EQUIPMENT_ID>"]
+    }}
+  ],
+  "edges": [
+    {{
+      "from":              "<node_id>",
+      "to":                "<node_id>",
+      "material":          "<output material name that flows from→to>",
+      "dependency_reason": "<one sentence explaining why B needs A's output>"
+    }}
+  ]
+}}
+"""
+
+
+def build_round1_prompt_from_text(
+    protocol_text: str,
+    target: str = "",
+    synthesis_type: str = "",
+    source: str = "",
+) -> tuple[str, str]:
+    """
+    Returns (system_prompt, user_prompt) for Round 1, parsing directly from
+    free-text protocol prose instead of a pre-extracted structured record.
+
+    protocol_text  : the raw experimental-procedure text (no pre-extracted
+                      operations/conditions — the LLM identifies these itself)
+    target         : target material name (metadata, not parsed from prose)
+    synthesis_type : e.g. "hydrothermal" (metadata, not parsed from prose)
+    source         : citation / provenance string, used only as protocol_id
+    """
+    user = ROUND1_USER_TEMPLATE_TEXT.format(
+        source=source or "unspecified",
+        target=target or "unspecified",
+        synthesis_type=synthesis_type or "unspecified",
+        protocol_text=protocol_text.strip(),
+        equipment_ids=json.dumps(EQUIPMENT_IDS, indent=2),
+    )
+    return ROUND1_SYSTEM_TEXT, user
 
 
 def build_round1_prompt(record: dict) -> tuple[str, str]:

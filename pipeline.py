@@ -6,10 +6,17 @@ protocols into hierarchical DAGs.
 
 Usage:
     export ANTHROPIC_API_KEY=sk-ant-...
-    from pipeline import parse_protocol
+    from pipeline import parse_protocol_text
+    dag = parse_protocol_text(protocol_text, target="...", synthesis_type="...")
 
-The pipeline is intentionally stateless — call parse_protocol() once per
-record; it returns the full hierarchical DAG as a plain Python dict.
+parse_protocol_text() parses raw protocol prose directly — nothing is
+pre-extracted; the LLM identifies operations, materials, quantities, and
+conditions itself. parse_protocol() is the older structured-record variant
+(for datasets that already provide a pre-extracted operations list).
+
+The pipeline is intentionally stateless — call parse_protocol_text() /
+parse_protocol() once per protocol; each returns the full hierarchical DAG
+as a plain Python dict.
 """
 
 import os
@@ -21,6 +28,7 @@ from dotenv import load_dotenv
 
 from llm_prompts import (
     build_round1_prompt,
+    build_round1_prompt_from_text,
     build_round2_prompt,
     ROUND1_OUTPUT_SCHEMA,
     ROUND2_OUTPUT_SCHEMA,
@@ -134,6 +142,46 @@ def run_round1(record: dict, verbose: bool = True) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Round 1 (text variant): free-text protocol prose → Task DAG
+# ---------------------------------------------------------------------------
+def run_round1_from_text(
+    protocol_text: str,
+    target: str = "",
+    synthesis_type: str = "",
+    source: str = "",
+    verbose: bool = True,
+) -> dict:
+    """
+    Parse raw protocol prose (no pre-extracted operations/conditions) into a
+    Task DAG. The LLM identifies the operations, materials, quantities, and
+    conditions itself, directly from the text.
+    """
+    client = _get_client()
+    system, user = build_round1_prompt_from_text(
+        protocol_text, target=target, synthesis_type=synthesis_type, source=source,
+    )
+
+    if verbose:
+        print(f"[Round 1] Parsing protocol text → Task DAG  "
+              f"(target: {target or 'unspecified'}, "
+              f"type: {synthesis_type or 'unspecified'}, "
+              f"{len(protocol_text.split())} words of prose)")
+
+    result = _call_llm(client, system, user, ROUND1_OUTPUT_SCHEMA, label="Round 1 (text)")
+
+    if verbose:
+        print(f"  ✓ {len(result['nodes'])} task nodes, "
+              f"{len(result['edges'])} dependency edges")
+        targets = {e["to"] for e in result["edges"]}
+        roots = [n for n in result["nodes"] if n["id"] not in targets]
+        if len(roots) > 1:
+            print(f"  ✓ Detected {len(roots)} parallel root tasks: "
+                  f"{[r['id'] + ':' + r['label'][:30] for r in roots]}")
+
+    return result
+
+
+# ---------------------------------------------------------------------------
 # Round 2: each Task node → atomic-op sub-DAG
 # ---------------------------------------------------------------------------
 def run_round2(
@@ -222,6 +270,46 @@ def parse_protocol(
     return r2
 
 
+def parse_protocol_text(
+    protocol_text: str,
+    target: str = "",
+    synthesis_type: str = "",
+    source: str = "",
+    verbose: bool = True,
+) -> dict:
+    """
+    Full two-round parse of raw protocol prose (free text, no pre-extracted
+    operations). Round 1 identifies the operations directly from the text;
+    Round 2 decomposes each into atomic ops, same as parse_protocol().
+
+    Parameters
+    ----------
+    protocol_text  : the raw experimental-procedure text
+    target         : target material name (metadata only, not parsed from text)
+    synthesis_type : e.g. "hydrothermal" (metadata only, not parsed from text)
+    source         : citation / provenance string
+    verbose        : print progress to stdout
+
+    Returns
+    -------
+    hierarchical_dag : dict with keys:
+        protocol_id, target_material, synthesis_type, reasoning,
+        nodes (each with atomic_ops), edges
+    """
+    if verbose:
+        print("=" * 60)
+        print(f"Parsing protocol text: {target or '(target unspecified)'}")
+        print("=" * 60)
+
+    r1 = run_round1_from_text(
+        protocol_text, target=target, synthesis_type=synthesis_type,
+        source=source, verbose=verbose,
+    )
+    r2 = run_round2(r1, verbose=verbose)
+
+    return r2
+
+
 # ---------------------------------------------------------------------------
 # Equipment colour map (used by visualisation)
 # ---------------------------------------------------------------------------
@@ -263,21 +351,24 @@ CATEGORY_COLORS = {
 # Quick smoke test (python pipeline.py)
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
-    import pathlib, sys
+    import pathlib
 
-    data_path = pathlib.Path(__file__).parent / "solutionsynthesis_dataset_202185.json"
-    demo_path = pathlib.Path(__file__).parent / "demo_protocols.json"
+    from lidocaine_protocol import (
+        LIDOCAINE_PROTOCOL_TEXT,
+        LIDOCAINE_TARGET,
+        LIDOCAINE_SYNTHESIS_TYPE,
+        LIDOCAINE_SOURCE,
+    )
 
-    with open(demo_path) as f:
-        demos = json.load(f)
+    result = parse_protocol_text(
+        LIDOCAINE_PROTOCOL_TEXT,
+        target=LIDOCAINE_TARGET,
+        synthesis_type=LIDOCAINE_SYNTHESIS_TYPE,
+        source=LIDOCAINE_SOURCE,
+        verbose=True,
+    )
 
-    # Parse just DEMO_2 (CoFe2O4, simplest) as a smoke test
-    demo = next(d for d in demos if d["demo_id"] == "DEMO_2")
-    record = demo["record"]
-
-    result = parse_protocol(record, verbose=True)
-
-    out = pathlib.Path(__file__).parent / "dag_CoFe2O4.json"
+    out = pathlib.Path(__file__).parent / "dag_lidocaine.json"
     with open(out, "w") as f:
         json.dump(result, f, indent=2)
     print(f"\nSaved → {out}")

@@ -1,8 +1,9 @@
 # ACSS Demo — Protocol Parsing & Fact-Based Validation
 
 Two-part live demo:
-1. An LLM parses a real synthesis protocol into a hierarchical task DAG (material-flow
-   dependencies, not text order).
+1. An LLM parses a real synthesis protocol's **raw text** into a hierarchical task DAG
+   (material-flow dependencies, not text order) — nothing is pre-extracted; the model
+   reads the prose and identifies the operations, materials, and conditions itself.
 2. A reagent's hidden role is proposed by an LLM, then checked by a separate model
    against real retrieved evidence before it's trusted.
 
@@ -38,8 +39,17 @@ Open `acss_demo.ipynb` and run cells top to bottom.
 | File | Purpose |
 |---|---|
 | `acss_demo.ipynb` | The demo notebook |
-| `pipeline.py`, `llm_prompts.py` | Protocol → DAG parsing (Part 1) |
+| `pipeline.py`, `llm_prompts.py` | Protocol text → DAG parsing (Part 1) |
+| `lidocaine_protocol.py` | Raw protocol prose used by the Part 1 demo (Cerritos College lab manual) |
 | `llm_cache.py` | Live-call-with-cached-fallback wrapper (Part 2) |
-| `demo_protocols.json` | 3 sample protocols for Part 1 |
+| `demo_protocols.json` | The Part 1 demo protocol (raw text + metadata) |
 | `validation_reference.json`, `validation_evidence.json` | Historical run data for Part 2 |
 | `demo_cache/` | Cached LLM responses so Part 2 still works offline |
+
+Part 1 parses free-text protocol prose directly — no pre-extracted operations list, no
+conditions table. The dataset this project also includes
+(`solutionsynthesis_dataset_202185.json`, from a materials-science literature-mining
+corpus) truncates its `paragraph_string` field for copyright reasons (~50 characters +
+`<...>` + ~50 characters — the actual protocol text isn't recoverable from it), so it
+isn't usable for a genuine text-parsing demo; the Part 1 demo protocol instead comes
+from a real, fully-quoted lab manual.
